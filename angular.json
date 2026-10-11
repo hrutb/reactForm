@@ -39,6 +39,7 @@
           "configurations": {
             "production": {
                "sourceMap": false,
+               "optimization": true,
               "budgets": [
                 {
                   "type": "initial",
