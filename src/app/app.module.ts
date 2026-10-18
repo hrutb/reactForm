@@ -5,11 +5,13 @@ import { AppComponent } from './app.component';
 import { FormsComponent } from './shared/component/forms/forms.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ReactiveFormsModule } from '@angular/forms';
+import { PasswordComponent } from './shared/component/password/password.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    FormsComponent
+    FormsComponent,
+    PasswordComponent
   ],
   imports: [
     BrowserModule,

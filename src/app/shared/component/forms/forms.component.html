@@ -1,6 +1,6 @@
 <div class="container">
   <div class="row mt-5">
-    <div class="col-md-6">
+    <div class="col-md-10">
       <div class="card">
          <div class="card-header">
               <h4>Login Form</h4>
@@ -11,19 +11,188 @@
             <div class="form-group">
                <label for="">User name:</label>
                <input class="form-control" formControlName="username">
+                <span *ngIf="controls['username'].touched && controls['username'].hasError('required')" class="text-danger">Username is required</span>
+                <!-- <span *ngIf="controls['username'].touched && controls['username'].dirty">user name is required</span> -->
             </div>
 
              <div class="form-group">
                <label for="">email:</label>
               <input class="form-control" formControlName="email">
+              <span *ngIf="controls['email'].touched && controls['email'].hasError('required')" class="text-danger">Email is Required...!</span>
             </div>
 
+             <div class="form-group">
+                <label for="">Employee Id:</label>
+                <input class="form-control" formControlName="empId">
+                <!-- <strong *ngIf="controls['empId'].touched && controls['empId'].hasError('required)" class="text-danger">enter valid id...(E123)!</strong> -->
+                <strong class="text-danger" *ngIf="controls['empId'].touched && controls['empId'].hasError('required')">enter valid id...(E123)!</strong>
+                <strong class="text-danger" *ngIf="controls['empId'].dirty && controls['empId'].hasError('invalidEmp')">{{controls['empId'].errors?.['invalidEmp']}}</strong>
+             </div>
+
+            <div class="row" formGroupName="address">
+                <div class="col-md-6"  formGroupName="current">
+                  <h2>Current Address</h2>
+                    <div class="form-group">
+                         <label for="city">City:</label>
+                         <input type="text" formControlName="city" class="form-control">
+                         <!-- <span *ngIf="curCity.get('address.current.city')?.touched && curCity.get('address.current.city')?.hasError('required')">City field is requried...!</span> -->
+                         <span *ngIf="curAdd['city'].touched && curAdd['city'].hasError('required') " class="text-danger">city field is Required......</span>
+                    </div>
+                    <div class="form-group">
+                         <label for="state">State:</label>
+                         <input type="text" formControlName="state" class="form-control">
+                         <!-- <span *ngIf="curCity.get('address.current.state')?.touched && curCity.get('address.current.state')?.hasError('required')">State field is requried...!</span> -->
+                         <span *ngIf="curAdd['state'].touched && curAdd['state'].hasError('required') ">State field is Required</span>
+
+                    </div>
+                     <div class="form-group">
+                         <label for="country">Country:</label>
+                         <input type="text" formControlName="country" class="form-control">
+                         <!-- <span *ngIf="curCity.get('address.current.country')?.touched && curCity.get('address.current.country')?.hasError('required')">Country field is requried...!</span> -->
+                         <span *ngIf="curAdd['country'].touched && curAdd['country'].hasError('required')" class="text-danger">Country field is Required</span>
+
+                    </div>
+                    <div class="form-group">
+                         <label for="pincode">Pincode:</label>
+                         <input type="text" formControlName="pincode" class="form-control">
+                         <!-- <span *ngIf="controls['address.current.pincode'].touched && controls['address.current.pincode'].invalid && controls['address.current.pincode'].hasError('required')">pincode field is required...!</span> -->
+                         <span *ngIf="curAdd['pincode'].touched && curAdd['pincode'].hasError('required') ">Pincode field is Required.....!</span>
+
+                     </div>
+
+                </div>
+
+                   <div class="col-md-6"  formGroupName="permanant">
+                  <h2>permanant Address</h2>
+                    <div class="form-group">
+                         <label for="city">City:</label>
+                         <input type="text" formControlName="city" class="form-control">
+                         <span *ngIf="curCity.get('address.current.city')?.touched && curCity.get('address.current.city')?.hasError('required')">City field is requried...!</span>
+
+                    </div>
+                    <div class="form-group">
+                         <label for="state">State:</label>
+                         <input type="text" formControlName="state" class="form-control">
+                         <!-- <span *ngIf="curCity.get('address.current.state')?.touched && curCity.get('address.current.state')?.hasError('required')">State field is requried...!</span> -->
+                    </div>
+
+                     <div class="form-group">
+                         <label for="country">Country:</label>
+                         <input type="text" formControlName="country" class="form-control">
+                         <!-- <span *ngIf="curCity.get('address.current.country')?.touched && curCity.get('address.current.country')?.hasError('required')">Country field is requried...!</span> -->
+                    </div>
+
+                    <div class="form-group">
+                          <label for="pincode">Pincode:</label>
+                          <input type="text" formControlName="pincode" class="form-control">
+                         <!-- <span *ngIf="curCity.get('address.current.pincode')?.touched && curCity.get('address.current.pincode')?.hasError('required')">pincode field is requried...!</span> -->
+                      </div>
+
+                </div>
+              </div>
+
+             <label for="">
+               <input type="checkbox" formControlName="isAddSame">permanant and current address is same
+             </label>
 
            </div>
-           <div class="card-footer">
+
+            <div formArrayName="Skills">
+                     <div class="row" *ngFor="let skill of skillsArr.controls; let i = index">
+                           <div class="col-md-8">
+                               <div class="form-group">
+                                 <input type="text" class="form-control" [formControlName]="i">
+
+                               </div>
+                           </div>
+
+                           <div class="col-md-4">
+                                    <button type="button" class="btn btn-block btn-danger" *ngIf="i>0" (click)="onRemove(i)" >Remove</button>
+                           </div>
+
+                     </div>
+                  </div>
+                  <button class="btn btn-primary"
+                        *ngIf="skillsArr.length<5"
+                        [disabled]="skillsArr.invalid"
+                        (click)="onAddSkill()"
+                        type="button"
+                   >Add Skill</button>
+
+                   <div  formArrayName="dependents">
+                     <div *ngFor="let dependent of denpendantsArr.controls ; let i = index">
+                     <div class="row" [formGroupName]="i">
+                      <div class="col">
+
+                        <div class="form-group">
+                          <input type="text" formControlName="fullName" >
+
+                        </div>
+                      </div>
+
+                       <div class="col">
+                          <div class="form-group">
+                             <select name="relationship"  formControlName="citizenship" class="form-control">
+                                   <option [ngValue]="val.citizenship"  *ngFor="let val of citizenship">
+                                          {{val.citizenship}}
+                                   </option>
+                             </select>
+                          </div>
+                       </div>
+
+                        <div class="col">
+                            <div class="form-group">
+                              <select name="relationship"  formControlName="relationship" class="form-control" id="">
+                                <option [value]="val" *ngFor="let val of ['Father', 'Mother', 'Son', 'Daughter', 'Wife', 'Husband']">
+                                           {{val}}
+                                </option>
+
+                              </select>
+                            </div>
+                        </div>
+
+                        <div class="col">
+                           <div class="form-group">
+                             <select name="isWithYou" formControlName="isTravellingWithYou" id="" class="form-control">
+                               <option [ngValue]="true">Yes</option>
+                               <option [ngValue]="false">No</option>
+                             </select>
+                           </div>
+
+                           <div class="col">
+                             <div class="form-group">
+
+                               <button  class="btn btn-sm"></button>
+                             </div>
+                           </div>
+
+                        </div>
+
+                         <div class="col">
+                            <div class="form-group">
+                              <button class="btn btn-sm form-control" *ngIf="i>0" color="primary" (click)="onRemove(i)">
+                                     Remove
+                              </button>
+                            </div>
+                         </div>
+
+                         <button *ngIf="denpendantsArr.length<3;else noDependence">Add dependent</button>
+
+                            
+
+
+                           <ng-template #noDependence>
+                                   <div class="alert alert-info">
+                                       You can add only 3 dependents.....!
+                                   </div>
+                           </ng-template>
+                       </div>
+                     </div>
+
+                   </div>
+
+
              <button class="btn btn-block btn-primary">Sign up</button>
-           </div>
-
          </form>
       </div>
 
